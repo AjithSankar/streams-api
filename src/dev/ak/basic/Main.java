@@ -1,4 +1,4 @@
-package basic;
+package dev.ak.basic;
 
 import java.util.List;
 import java.util.Map;
