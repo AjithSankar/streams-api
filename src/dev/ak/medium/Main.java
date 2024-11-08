@@ -38,10 +38,10 @@ public class Main {
 
         Map<Integer, List<String>> groupByAgeAndFlattenCourse = students.stream()
                 .collect(Collectors.groupingBy(Student::getAge,
-                                Collectors.flatMapping(
-                                        student -> student.getCourses()
-                                                .stream(),
-                                        Collectors.toList()))
+                        Collectors.flatMapping(
+                                student -> student.getCourses()
+                                        .stream(),
+                                Collectors.toList()))
                 );
 
         System.out.println("groupByAgeAndFlattenCourse: \n" + groupByAgeAndFlattenCourse);
@@ -73,20 +73,64 @@ public class Main {
                 .reduce((w1, w2) -> w1.length() >= w2.length() ? w1 : w2)
                 .orElseThrow(() -> new RuntimeException("No words found"));
 
-        System.out.println("longestWord: "+ longestWord);
+        System.out.println("longestWord: " + longestWord);
 
         String longestWordUsingMax = words.stream()
                 .max(Comparator.comparing(String::length))
                 .orElseThrow();
 
-        System.out.println("longestWordUsingMax: "+ longestWord);
+        System.out.println("longestWordUsingMax: " + longestWord);
 
         String longestWordUsingSorted = words.stream()
                 //.sorted(Comparator.comparingInt(String::length).reversed())
-                .sorted((w1,w2) -> Integer.compare(w2.length(), w1.length()))
+                .sorted((w1, w2) -> Integer.compare(w2.length(), w1.length()))
                 .findFirst()
                 .orElseThrow();
 
-        System.out.println("longestWordUsingSorted: "+ longestWordUsingSorted);
+        System.out.println("longestWordUsingSorted: " + longestWordUsingSorted);
+
+        // Filter and Transform: Given a list of integers, filter numbers greater than 10, multiply each by 2, and collect the results in a list.
+
+        List<Integer> nums = List.of(5, 10, 12, 15, 20, 25);
+
+        List<Integer> numsGreaterThan10 = nums.stream()
+                .filter(n -> n > 10)
+                .map(n -> n * 2)
+                .toList();
+
+        System.out.println("numsGreaterThan10: " + numsGreaterThan10);
+
+        // Top Three Salaries: Given a list of employees, find the top three highest salaries. Each employee has a name and salary.
+
+        List<Employee> employees = List.of(
+                new Employee("Leo",100000),
+                new Employee("Jon", 130000),
+                new Employee("Ram",50000),
+                new Employee("Ramesh",60000),
+                new Employee("Raju",10000),
+                new Employee("Raja",90000));
+
+        List<Employee> topThreeEmployee = employees.stream()
+                .sorted(Comparator.comparing(Employee::getSalary).reversed())
+                //.sorted((a, b) -> Double.compare(b.getSalary(), a.getSalary()))
+                .limit(3)
+                .toList();
+
+        System.out.println("topThreeEmployee: \n" + topThreeEmployee);
+
+        // List to Map: Given a list of strings, create a map where the key is the string itself and the value is the length of the string.
+        /* In Java Streams, there is no direct toMap() method like toList(),
+        but you can easily collect stream results into a Map by using Collectors.toMap().
+        * toMap(keyMapper, valueMapper): Collects to Map with specified keys and values.
+        * toMap(keyMapper, valueMapper, mergeFunction): Handles duplicate keys with a merge function.
+        * toMap(keyMapper, valueMapper, mergeFunction, mapSupplier): Specifies the type of Map to use.
+        * */
+        List<String> fruits = new ArrayList<>(List.of("Apple", "Orange", "Banana", "Grapes"));
+
+        Map<String, Integer> NamesMap = fruits.stream()
+                .collect(Collectors.toMap(name -> name, String::length));
+        System.out.println("NamesMap: \n" + NamesMap);
+
+
     }
 }
